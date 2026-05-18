@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════
+# ShopVerse FULL STACK — App + Jenkins + Prometheus + Grafana
+# Usage: docker compose -f compose.yaml -f compose.full.yaml up --build -d
+# ═══════════════════════════════════════════════════════════════
+
+services:
+  # ── Override DB to use RDS (if SPRING_DATASOURCE_URL points to RDS) ──
+  # The base compose.yaml DB still works for local dev.
+  # On AWS, the Product Service env vars from .env override to point to RDS.
+
+  # ── Jenkins (CI/CD — Unit IV) ──
+  jenkins:
+    image: jenkins/jenkins:lts-jdk21
+    user: root
+    ports:
+      - "9095:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/login"]  # Port 8080 inside container
+      interval: 30s
+      start_period: 120s
+      retries: 5
+
+  # ── Prometheus (Monitoring — Unit V) ──
+  prometheus:
+    image: prom/prometheus:v2.54.0
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=7d'
+    depends_on:
+      product-service:
+        condition: service_healthy
+
+  # ── Grafana (Dashboards — Unit V) ──
+  grafana:
+    image: grafana/grafana:11.1.0
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: shopverse
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  jenkins-data:
+  prometheus-data:
+  grafana-data:

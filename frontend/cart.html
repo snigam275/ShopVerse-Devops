@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart — ShopVerse</title>
+  <meta name="description" content="Review your shopping cart, update quantities, and proceed to checkout." />
+
+  <!-- Google Fonts — Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+        Shop<span class="logo__accent">Verse</span>
+      </a>
+
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link">Shop</a></li>
+        <li><a href="products.html?category=electronics" class="nav-link">Electronics</a></li>
+        <li><a href="products.html?category=fashion" class="nav-link">Fashion</a></li>
+      </ul>
+
+      <div class="navbar__actions">
+        <button class="btn-icon" id="darkModeToggle" aria-label="Toggle dark mode">
+          <i data-feather="moon" class="icon-dark"></i>
+          <i data-feather="sun" class="icon-light"></i>
+        </button>
+        <a href="cart.html" class="btn-icon cart-icon" id="cartIcon" aria-label="Shopping cart">
+          <i data-feather="shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <i data-feather="menu" class="icon-menu"></i>
+          <i data-feather="x" class="icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGE HEADER
+       ═══════════════════════════════════════════════════ -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <i data-feather="chevron-right"></i>
+        <span>Shopping Cart</span>
+      </div>
+      <h1 class="page-header__title">Shopping Cart</h1>
+      <p class="page-header__subtitle"><span id="cartItemCount">0</span> items in your cart</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       CART LAYOUT — Items list + Order summary sidebar
+       ═══════════════════════════════════════════════════ -->
+  <section class="section cart-section">
+    <div class="container">
+
+      <!-- Cart with items -->
+      <div class="cart-layout" id="cartLayout">
+
+        <!-- ─── CART ITEMS LIST ─── -->
+        <div class="cart-items" id="cartItems">
+          <!-- Table header (desktop) -->
+          <div class="cart-table-header">
+            <span class="cart-col cart-col--product">Product</span>
+            <span class="cart-col cart-col--price">Price</span>
+            <span class="cart-col cart-col--quantity">Quantity</span>
+            <span class="cart-col cart-col--subtotal">Subtotal</span>
+            <span class="cart-col cart-col--actions"></span>
+          </div>
+
+          <!-- Cart item rows — dynamically rendered by script.js -->
+          <div class="cart-items-list" id="cartItemsList">
+            <!-- JS populates this with cart-item rows -->
+          </div>
+
+          <!-- Cart actions bar -->
+          <div class="cart-actions-bar">
+            <a href="products.html" class="btn btn--outline">
+              <i data-feather="arrow-left"></i>
+              Continue Shopping
+            </a>
+            <button class="btn btn--danger" id="clearCartBtn">
+              <i data-feather="trash-2"></i>
+              Clear Cart
+            </button>
+          </div>
+        </div>
+
+
+        <!-- ─── ORDER SUMMARY SIDEBAR ─── -->
+        <aside class="order-summary" id="orderSummary">
+          <h3 class="order-summary__title">Order Summary</h3>
+
+          <div class="order-summary__rows">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="summarySubtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="summaryShipping">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>Tax (18% GST)</span>
+              <span id="summaryTax">₹0</span>
+            </div>
+          </div>
+
+          <hr class="order-summary__divider" />
+
+          <!-- Coupon code -->
+          <div class="coupon-section">
+            <h4 class="coupon-section__title">Have a coupon?</h4>
+            <div class="coupon-input-group">
+              <input
+                type="text"
+                class="coupon-input"
+                id="couponInput"
+                placeholder="Enter coupon code"
+              />
+              <button class="btn btn--outline btn--sm" id="applyCouponBtn">Apply</button>
+            </div>
+            <p class="coupon-message" id="couponMessage"></p>
+          </div>
+
+          <hr class="order-summary__divider" />
+
+          <!-- Discount row (hidden by default) -->
+          <div class="summary-row summary-row--discount" id="discountRow" style="display:none;">
+            <span>Discount</span>
+            <span class="text-success" id="summaryDiscount">-₹0</span>
+          </div>
+
+          <div class="summary-row summary-row--total">
+            <span>Total</span>
+            <span id="summaryTotal">₹0</span>
+          </div>
+
+          <button class="btn btn--primary btn--block btn--lg" id="checkoutBtn">
+            <i data-feather="credit-card"></i>
+            Proceed to Checkout
+          </button>
+
+          <!-- Trust icons -->
+          <div class="order-summary__trust">
+            <div class="trust-mini">
+              <i data-feather="lock"></i>
+              <span>Secure Checkout</span>
+            </div>
+            <div class="trust-mini">
+              <i data-feather="truck"></i>
+              <span>Free Shipping over ₹999</span>
+            </div>
+            <div class="trust-mini">
+              <i data-feather="refresh-cw"></i>
+              <span>30-Day Returns</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════════════
+           EMPTY CART STATE — Shown when cart is empty
+           ═══════════════════════════════════════════════ -->
+      <div class="empty-cart" id="emptyCart" style="display:none;">
+        <div class="empty-cart__icon">
+          <i data-feather="shopping-cart"></i>
+        </div>
+        <h2 class="empty-cart__title">Your Cart is Empty</h2>
+        <p class="empty-cart__text">Looks like you haven't added any items to your cart yet. Start shopping to fill it up!</p>
+        <a href="products.html" class="btn btn--primary btn--lg">
+          <i data-feather="shopping-bag"></i>
+          Start Shopping
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       RECENTLY VIEWED / SUGGESTED PRODUCTS
+       ═══════════════════════════════════════════════════ -->
+  <section class="section suggested-products" id="suggestedProducts">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Before You Go</span>
+        <h2 class="section__title">You Might Also Like</h2>
+      </div>
+      <div class="products-grid" id="suggestedProductsGrid">
+        <!-- Populated by script.js -->
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__column footer__brand">
+          <a href="index.html" class="navbar__logo">
+            <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+            Shop<span class="logo__accent">Verse</span>
+          </a>
+          <p class="footer__desc">Your premium destination for quality products at the best prices. Shop with confidence.</p>
+          <div class="footer__social">
+            <a href="#" class="social-link" aria-label="Facebook"><i data-feather="facebook"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i data-feather="twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i data-feather="instagram"></i></a>
+            <a href="#" class="social-link" aria-label="YouTube"><i data-feather="youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Quick Links</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">All Products</a></li>
+            <li><a href="products.html?category=electronics">Electronics</a></li>
+            <li><a href="products.html?category=fashion">Fashion</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Customer Service</h4>
+          <ul class="footer__links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Contact</h4>
+          <ul class="footer__links footer__contact">
+            <li><i data-feather="map-pin"></i><span>123 Shopping Ave, Mumbai, India</span></li>
+            <li><i data-feather="mail"></i><span>support@shopverse.com</span></li>
+            <li><i data-feather="phone"></i><span>+91 98765 43210</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 ShopVerse. All rights reserved. Built with ❤️</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <i data-feather="chevron-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

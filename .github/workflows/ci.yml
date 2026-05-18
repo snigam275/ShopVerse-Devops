@@ -1,0 +1,205 @@
+# ═══════════════════════════════════════════════════════════════
+# ShopVerse CI/CD Pipeline — GitHub Actions
+# Covers: Unit IV (CI/CD), Unit V (DevSecOps scanning)
+# ═══════════════════════════════════════════════════════════════
+name: ShopVerse CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository_owner }}/shopverse
+
+jobs:
+  # ── Stage 1: Lint & Unit Tests ──
+  test-product-service:
+    name: "🧪 Product Service Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: product-service
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Run Maven Tests
+        run: ./mvnw verify -B
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: product-service-test-report
+          path: product-service/target/surefire-reports/
+
+  test-cart-service:
+    name: "🧪 Cart Service Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cart-service
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: cart-service/package-lock.json
+
+      - name: Install & Test
+        run: |
+          npm ci
+          npm test
+
+  # ── Stage 2: Security Scanning (DevSecOps - Unit V/VI) ──
+  security-scan:
+    name: "🔒 Security Scan (Trivy)"
+    runs-on: ubuntu-latest
+    needs: [test-product-service, test-cart-service]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Product Service Image
+        run: docker build -t shopverse/product-service:scan ./product-service
+
+      - name: Build Cart Service Image
+        run: docker build -t shopverse/cart-service:scan ./cart-service
+
+      - name: Scan Product Service
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: shopverse/product-service:scan
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 0
+
+      - name: Scan Cart Service
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: shopverse/cart-service:scan
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 0
+
+  # ── Stage 3: Build & Push Docker Images ──
+  build-and-push:
+    name: "🐳 Build & Push Images"
+    runs-on: ubuntu-latest
+    needs: [security-scan]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        service: [product-service, cart-service, frontend]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.service }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service }}:${{ github.sha }}
+
+  # ── Stage 4: Integration Test ──
+  integration-test:
+    name: "🔗 Integration Test"
+    runs-on: ubuntu-latest
+    needs: [test-product-service, test-cart-service]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start All Services
+        run: docker-compose up --build -d
+
+      - name: Wait for Services
+        run: |
+          echo "Waiting for services to be healthy..."
+          sleep 40
+
+      - name: P0 Smoke Tests
+        run: |
+          set -e
+          echo "── P0.1: Container Health ──"
+          docker-compose ps
+
+          echo "── P0.2: Products API ──"
+          TOTAL=$(curl -sf http://localhost:3000/api/products | python3 -c "import sys,json; print(json.load(sys.stdin)['total'])")
+          [ "$TOTAL" = "16" ] && echo "✅ 16 products" || (echo "❌ Expected 16, got $TOTAL" && exit 1)
+
+          echo "── P0.3: Single Product ──"
+          NAME=$(curl -sf http://localhost:3000/api/products/1 | python3 -c "import sys,json; print(json.load(sys.stdin)['name'])")
+          echo "✅ Product: $NAME"
+
+          echo "── P0.4: Checkout ──"
+          STATUS=$(curl -sf -X POST http://localhost:3000/api/cart/checkout \
+            -H 'Content-Type: application/json' \
+            -d '{"items":[{"id":1,"qty":1}]}' | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")
+          [ "$STATUS" = "confirmed" ] && echo "✅ Checkout confirmed" || (echo "❌ Checkout failed" && exit 1)
+
+          echo "── P0.5: 404 ──"
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/products/999)
+          [ "$HTTP" = "404" ] && echo "✅ 404 correct" || (echo "❌ Expected 404, got $HTTP" && exit 1)
+
+          echo "── P0.6: Limit Cap ──"
+          LIMIT=$(curl -sf "http://localhost:3000/api/products?limit=9999" | python3 -c "import sys,json; print(json.load(sys.stdin)['limit'])")
+          [ "$LIMIT" = "100" ] && echo "✅ Limit capped at 100" || (echo "❌ Expected 100, got $LIMIT" && exit 1)
+
+          echo "── P0.7: Invalid Coupon ──"
+          VALID=$(curl -sf -X POST http://localhost:3000/api/cart/validate-coupon \
+            -H 'Content-Type: application/json' -d '{"code":"FAKE"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['valid'])")
+          [ "$VALID" = "False" ] && echo "✅ Invalid coupon rejected" || (echo "❌ Expected False" && exit 1)
+
+          echo ""
+          echo "🎉 ALL P0 TESTS PASSED"
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+
+  # ── Stage 5: Terraform Validate ──
+  terraform-validate:
+    name: "🏗️ Terraform Validate"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.0
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive

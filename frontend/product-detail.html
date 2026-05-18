@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details — ShopVerse</title>
+  <meta name="description" content="View product details, images, specifications and add to your cart." />
+
+  <!-- Google Fonts — Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+        Shop<span class="logo__accent">Verse</span>
+      </a>
+
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link">Shop</a></li>
+        <li><a href="products.html?category=electronics" class="nav-link">Electronics</a></li>
+        <li><a href="products.html?category=fashion" class="nav-link">Fashion</a></li>
+      </ul>
+
+      <div class="navbar__actions">
+        <button class="btn-icon" id="darkModeToggle" aria-label="Toggle dark mode">
+          <i data-feather="moon" class="icon-dark"></i>
+          <i data-feather="sun" class="icon-light"></i>
+        </button>
+        <a href="cart.html" class="btn-icon cart-icon" id="cartIcon" aria-label="Shopping cart">
+          <i data-feather="shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <i data-feather="menu" class="icon-menu"></i>
+          <i data-feather="x" class="icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       BREADCRUMB
+       ═══════════════════════════════════════════════════ -->
+  <section class="page-header page-header--compact">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <i data-feather="chevron-right"></i>
+        <a href="products.html">Shop</a>
+        <i data-feather="chevron-right"></i>
+        <span id="breadcrumbProduct">Loading…</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       PRODUCT DETAIL — Image gallery + product info
+       Dynamically populated by script.js based on ?id=
+       ═══════════════════════════════════════════════════ -->
+  <section class="section product-detail" id="productDetail">
+    <div class="container">
+      <div class="product-detail__grid">
+
+        <!-- ─── IMAGE GALLERY ─── -->
+        <div class="product-gallery" id="productGallery">
+          <!-- Main Image -->
+          <div class="product-gallery__main">
+            <div class="product-gallery__badge" id="productBadge"></div>
+            <img
+              src=""
+              alt=""
+              class="product-gallery__image"
+              id="mainProductImage"
+            />
+            <button class="product-gallery__zoom" id="zoomBtn" aria-label="Zoom image">
+              <i data-feather="zoom-in"></i>
+            </button>
+          </div>
+
+          <!-- Thumbnail Strip -->
+          <div class="product-gallery__thumbs" id="productThumbs">
+            <!-- Populated by JS — up to 4 thumbnail images -->
+          </div>
+        </div>
+
+
+        <!-- ─── PRODUCT INFO ─── -->
+        <div class="product-info" id="productInfo">
+          <!-- Category Tag -->
+          <span class="product-info__category" id="productCategory">Loading…</span>
+
+          <!-- Name -->
+          <h1 class="product-info__name" id="productName">Loading product…</h1>
+
+          <!-- Rating -->
+          <div class="product-info__rating" id="productRating">
+            <div class="stars">
+              <span class="stars__filled" id="starsFilledDetail">★★★★★</span>
+            </div>
+            <span class="rating-value" id="ratingValueDetail">0.0</span>
+            <span class="rating-count" id="ratingCountDetail">(0 reviews)</span>
+          </div>
+
+          <!-- Price -->
+          <div class="product-info__price">
+            <span class="price-current" id="productPrice">₹0</span>
+            <span class="price-original" id="productOriginalPrice"></span>
+            <span class="price-discount" id="productDiscount"></span>
+          </div>
+
+          <!-- Description -->
+          <div class="product-info__desc" id="productDescription">
+            <p>Loading description…</p>
+          </div>
+
+          <!-- Highlights -->
+          <div class="product-info__highlights" id="productHighlights">
+            <h3>Highlights</h3>
+            <ul id="highlightsList">
+              <!-- Populated by JS -->
+            </ul>
+          </div>
+
+          <!-- Divider -->
+          <hr class="product-info__divider" />
+
+          <!-- Quantity + Add to Cart -->
+          <div class="product-info__actions">
+            <div class="quantity-selector" id="quantitySelector">
+              <button class="quantity-btn" id="quantityMinus" aria-label="Decrease quantity">
+                <i data-feather="minus"></i>
+              </button>
+              <input
+                type="number"
+                class="quantity-input"
+                id="quantityInput"
+                value="1"
+                min="1"
+                max="10"
+                readonly
+              />
+              <button class="quantity-btn" id="quantityPlus" aria-label="Increase quantity">
+                <i data-feather="plus"></i>
+              </button>
+            </div>
+
+            <button class="btn btn--primary btn--lg add-to-cart-detail" id="addToCartDetail">
+              <i data-feather="shopping-cart"></i>
+              Add to Cart
+            </button>
+
+            <button class="btn-icon btn--wishlist" id="wishlistBtn" aria-label="Add to wishlist">
+              <i data-feather="heart"></i>
+            </button>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="product-info__trust">
+            <div class="trust-badge">
+              <i data-feather="truck"></i>
+              <span>Free Delivery</span>
+            </div>
+            <div class="trust-badge">
+              <i data-feather="refresh-cw"></i>
+              <span>30-Day Returns</span>
+            </div>
+            <div class="trust-badge">
+              <i data-feather="shield"></i>
+              <span>Secure Payment</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       PRODUCT TABS — Description / Specifications / Reviews
+       ═══════════════════════════════════════════════════ -->
+  <section class="section product-tabs-section">
+    <div class="container">
+      <div class="product-tabs">
+        <div class="product-tabs__nav">
+          <button class="tab-btn active" data-tab="description">Description</button>
+          <button class="tab-btn" data-tab="specifications">Specifications</button>
+          <button class="tab-btn" data-tab="reviews">Reviews</button>
+        </div>
+
+        <div class="product-tabs__content">
+          <!-- Description Tab -->
+          <div class="tab-panel active" id="tab-description">
+            <div class="tab-panel__body" id="fullDescription">
+              <p>Detailed product description will appear here once the product data is loaded.</p>
+            </div>
+          </div>
+
+          <!-- Specifications Tab -->
+          <div class="tab-panel" id="tab-specifications">
+            <table class="specs-table" id="specsTable">
+              <tbody>
+                <tr><td>Brand</td><td id="specBrand">—</td></tr>
+                <tr><td>Category</td><td id="specCategory">—</td></tr>
+                <tr><td>Material</td><td id="specMaterial">—</td></tr>
+                <tr><td>Weight</td><td id="specWeight">—</td></tr>
+                <tr><td>Warranty</td><td id="specWarranty">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Reviews Tab -->
+          <div class="tab-panel" id="tab-reviews">
+            <div class="reviews-summary" id="reviewsSummary">
+              <div class="reviews-summary__score">
+                <span class="big-rating" id="bigRating">0.0</span>
+                <div class="stars"><span class="stars__filled" id="starsFilledReview">★★★★★</span></div>
+                <span class="review-total" id="reviewTotal">Based on 0 reviews</span>
+              </div>
+              <div class="reviews-summary__bars" id="ratingBars">
+                <div class="rating-bar">
+                  <span>5 ★</span>
+                  <div class="bar"><div class="bar__fill" data-percent="70"></div></div>
+                  <span class="bar__count">0</span>
+                </div>
+                <div class="rating-bar">
+                  <span>4 ★</span>
+                  <div class="bar"><div class="bar__fill" data-percent="20"></div></div>
+                  <span class="bar__count">0</span>
+                </div>
+                <div class="rating-bar">
+                  <span>3 ★</span>
+                  <div class="bar"><div class="bar__fill" data-percent="5"></div></div>
+                  <span class="bar__count">0</span>
+                </div>
+                <div class="rating-bar">
+                  <span>2 ★</span>
+                  <div class="bar"><div class="bar__fill" data-percent="3"></div></div>
+                  <span class="bar__count">0</span>
+                </div>
+                <div class="rating-bar">
+                  <span>1 ★</span>
+                  <div class="bar"><div class="bar__fill" data-percent="2"></div></div>
+                  <span class="bar__count">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sample Reviews -->
+            <div class="reviews-list" id="reviewsList">
+              <div class="review-card">
+                <div class="review-card__header">
+                  <div class="review-card__avatar">A</div>
+                  <div>
+                    <strong>Aarav S.</strong>
+                    <div class="stars stars--sm"><span class="stars__filled">★★★★★</span></div>
+                  </div>
+                  <span class="review-card__date">2 weeks ago</span>
+                </div>
+                <p>Excellent product! Quality is top-notch and delivery was super fast. Highly recommended for anyone looking for premium quality.</p>
+              </div>
+              <div class="review-card">
+                <div class="review-card__header">
+                  <div class="review-card__avatar">P</div>
+                  <div>
+                    <strong>Priya M.</strong>
+                    <div class="stars stars--sm"><span class="stars__filled">★★★★</span></div>
+                  </div>
+                  <span class="review-card__date">1 month ago</span>
+                </div>
+                <p>Very good value for money. The build quality is impressive and it looks even better in person. Minor packaging issue but overall satisfied.</p>
+              </div>
+              <div class="review-card">
+                <div class="review-card__header">
+                  <div class="review-card__avatar">R</div>
+                  <div>
+                    <strong>Rahul K.</strong>
+                    <div class="stars stars--sm"><span class="stars__filled">★★★★★</span></div>
+                  </div>
+                  <span class="review-card__date">1 month ago</span>
+                </div>
+                <p>Absolutely love it! This is my second purchase from ShopVerse and they never disappoint. Will definitely be coming back for more.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       RELATED PRODUCTS — Dynamically populated by JS
+       ═══════════════════════════════════════════════════ -->
+  <section class="section related-products" id="relatedProducts">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">You May Also Like</span>
+        <h2 class="section__title">Related Products</h2>
+      </div>
+      <div class="products-grid" id="relatedProductsGrid">
+        <!-- Skeleton loaders -->
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__column footer__brand">
+          <a href="index.html" class="navbar__logo">
+            <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+            Shop<span class="logo__accent">Verse</span>
+          </a>
+          <p class="footer__desc">Your premium destination for quality products at the best prices. Shop with confidence.</p>
+          <div class="footer__social">
+            <a href="#" class="social-link" aria-label="Facebook"><i data-feather="facebook"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i data-feather="twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i data-feather="instagram"></i></a>
+            <a href="#" class="social-link" aria-label="YouTube"><i data-feather="youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Quick Links</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">All Products</a></li>
+            <li><a href="products.html?category=electronics">Electronics</a></li>
+            <li><a href="products.html?category=fashion">Fashion</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Customer Service</h4>
+          <ul class="footer__links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Contact</h4>
+          <ul class="footer__links footer__contact">
+            <li><i data-feather="map-pin"></i><span>123 Shopping Ave, Mumbai, India</span></li>
+            <li><i data-feather="mail"></i><span>support@shopverse.com</span></li>
+            <li><i data-feather="phone"></i><span>+91 98765 43210</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 ShopVerse. All rights reserved. Built with ❤️</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <i data-feather="chevron-up"></i>
+  </button>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       IMAGE ZOOM MODAL
+       ═══════════════════════════════════════════════════ -->
+  <div class="zoom-modal" id="zoomModal">
+    <button class="zoom-modal__close" id="zoomClose" aria-label="Close zoom">
+      <i data-feather="x"></i>
+    </button>
+    <img src="" alt="Zoomed product" class="zoom-modal__image" id="zoomImage" />
+  </div>
+
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

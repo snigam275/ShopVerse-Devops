@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopVerse — Modern E-Commerce Store</title>
+    <meta name="description"
+        content="Discover premium products at unbeatable prices. Shop electronics, fashion, accessories and more at ShopVerse." />
+
+    <!-- Google Fonts — Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Feather Icons via CDN -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════
+       NAVBAR — Sticky navigation with logo, links,
+       dark-mode toggle, and cart icon with badge
+       ═══════════════════════════════════════════════════ -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar__inner">
+            <!-- Logo -->
+            <a href="index.html" class="navbar__logo">
+                <span class="logo__icon">
+                    <i data-feather="shopping-bag"></i>
+                </span>
+                Shop<span class="logo__accent">Verse</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="navbar__links" id="navLinks">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="products.html" class="nav-link">Shop</a></li>
+                <li><a href="products.html?category=electronics" class="nav-link">Electronics</a></li>
+                <li><a href="products.html?category=fashion" class="nav-link">Fashion</a></li>
+            </ul>
+
+            <!-- Right-side actions -->
+            <div class="navbar__actions">
+                <!-- Dark Mode Toggle -->
+                <button class="btn-icon" id="darkModeToggle" aria-label="Toggle dark mode">
+                    <i data-feather="moon" class="icon-dark"></i>
+                    <i data-feather="sun" class="icon-light"></i>
+                </button>
+
+                <!-- Cart Icon -->
+                <a href="cart.html" class="btn-icon cart-icon" id="cartIcon" aria-label="Shopping cart">
+                    <i data-feather="shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i data-feather="menu" class="icon-menu"></i>
+                    <i data-feather="x" class="icon-close"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       HERO SECTION — Full-width gradient banner with
+       headline, subtitle, and call-to-action buttons
+       ═══════════════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+        <div class="hero__bg-shapes">
+            <div class="shape shape--1"></div>
+            <div class="shape shape--2"></div>
+            <div class="shape shape--3"></div>
+        </div>
+        <div class="container hero__content">
+            <div class="hero__text animate-fade-up">
+                <span class="hero__badge">🔥 New Season Collection 2026</span>
+                <h1 class="hero__title">
+                    Discover the <span class="gradient-text">Future</span> of Shopping
+                </h1>
+                <p class="hero__subtitle">
+                    Curated premium products, unbeatable prices, and a seamless experience.
+                    Your one-stop destination for everything you love.
+                </p>
+                <div class="hero__cta">
+                    <a href="products.html" class="btn btn--primary btn--lg">
+                        <i data-feather="shopping-bag"></i>
+                        Shop Now
+                    </a>
+                    <a href="#featured" class="btn btn--outline btn--lg">
+                        <i data-feather="eye"></i>
+                        Explore
+                    </a>
+                </div>
+                <div class="hero__stats">
+                    <div class="stat">
+                        <span class="stat__number" data-count="10000">10k+</span>
+                        <span class="stat__label">Products</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__number" data-count="50000">50k+</span>
+                        <span class="stat__label">Happy Customers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__number" data-count="200">200+</span>
+                        <span class="stat__label">Top Brands</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__image animate-fade-up" style="animation-delay: .2s">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop"
+                    alt="Premium shopping experience" loading="eager" />
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       FEATURED PRODUCTS — Grid of top-selling items
+       ═══════════════════════════════════════════════════ -->
+    <section class="section featured" id="featured">
+        <div class="container">
+            <div class="section__header animate-on-scroll">
+                <span class="section__tag">Handpicked for You</span>
+                <h2 class="section__title">Featured Products</h2>
+                <p class="section__subtitle">Our most popular picks this season — loved by thousands.</p>
+            </div>
+
+            <!-- Product grid is rendered dynamically by script.js -->
+            <div class="products-grid" id="featuredProducts">
+                <!-- Skeleton loading placeholders shown before JS populates -->
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="product-card skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </div>
+
+            <div class="section__footer animate-on-scroll">
+                <a href="products.html" class="btn btn--primary">
+                    View All Products
+                    <i data-feather="arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       CATEGORIES — Browse by category cards
+       ═══════════════════════════════════════════════════ -->
+    <section class="section categories" id="categories">
+        <div class="container">
+            <div class="section__header animate-on-scroll">
+                <span class="section__tag">Browse Collection</span>
+                <h2 class="section__title">Shop by Category</h2>
+                <p class="section__subtitle">Find exactly what you need from our curated categories.</p>
+            </div>
+
+            <div class="categories-grid">
+                <!-- Electronics -->
+                <a href="products.html?category=electronics" class="category-card animate-on-scroll">
+                    <div class="category-card__image">
+                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=300&fit=crop"
+                            alt="Electronics" loading="lazy" />
+                    </div>
+                    <div class="category-card__overlay">
+                        <h3 class="category-card__title">Electronics</h3>
+                        <span class="category-card__count">48 Products</span>
+                    </div>
+                </a>
+
+                <!-- Fashion -->
+                <a href="products.html?category=fashion" class="category-card animate-on-scroll"
+                    style="animation-delay:.1s">
+                    <div class="category-card__image">
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop"
+                            alt="Fashion" loading="lazy" />
+                    </div>
+                    <div class="category-card__overlay">
+                        <h3 class="category-card__title">Fashion</h3>
+                        <span class="category-card__count">64 Products</span>
+                    </div>
+                </a>
+
+                <!-- Accessories -->
+                <a href="products.html?category=accessories" class="category-card animate-on-scroll"
+                    style="animation-delay:.2s">
+                    <div class="category-card__image">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop"
+                            alt="Accessories" loading="lazy" />
+                    </div>
+                    <div class="category-card__overlay">
+                        <h3 class="category-card__title">Accessories</h3>
+                        <span class="category-card__count">36 Products</span>
+                    </div>
+                </a>
+
+                <!-- Home & Living -->
+                <a href="products.html?category=home" class="category-card animate-on-scroll"
+                    style="animation-delay:.3s">
+                    <div class="category-card__image">
+                        <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=300&fit=crop"
+                            alt="Home &amp; Living" loading="lazy" />
+                    </div>
+                    <div class="category-card__overlay">
+                        <h3 class="category-card__title">Home &amp; Living</h3>
+                        <span class="category-card__count">29 Products</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       PROMOTIONAL OFFERS — Eye-catching deal banners
+       ═══════════════════════════════════════════════════ -->
+    <section class="section promos" id="promos">
+        <div class="container">
+            <div class="promos-grid">
+                <!-- Promo Card 1 — Big Sale -->
+                <div class="promo-card promo-card--large animate-on-scroll">
+                    <div class="promo-card__bg">
+                        <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&h=500&fit=crop"
+                            alt="Summer sale" loading="lazy" />
+                    </div>
+                    <div class="promo-card__content">
+                        <span class="promo-card__tag">Limited Time</span>
+                        <h3 class="promo-card__title">Summer Sale<br /><span class="gradient-text">Up to 60% Off</span>
+                        </h3>
+                        <p class="promo-card__text">Don't miss our biggest sale of the year on premium electronics and
+                            accessories.</p>
+                        <a href="products.html" class="btn btn--white">Shop the Sale</a>
+                    </div>
+                </div>
+
+                <!-- Promo Card 2 — New Arrivals -->
+                <div class="promo-card animate-on-scroll" style="animation-delay:.1s">
+                    <div class="promo-card__bg">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&h=400&fit=crop"
+                            alt="New arrivals" loading="lazy" />
+                    </div>
+                    <div class="promo-card__content">
+                        <span class="promo-card__tag">Just Landed</span>
+                        <h3 class="promo-card__title">New Arrivals</h3>
+                        <a href="products.html" class="btn btn--white btn--sm">Explore</a>
+                    </div>
+                </div>
+
+                <!-- Promo Card 3 — Free Shipping -->
+                <div class="promo-card animate-on-scroll" style="animation-delay:.2s">
+                    <div class="promo-card__bg">
+                        <img src="https://images.unsplash.com/photo-1586880244406-556ebe35f282?w=500&h=400&fit=crop"
+                            alt="Free shipping" loading="lazy" />
+                    </div>
+                    <div class="promo-card__content">
+                        <span class="promo-card__tag">Special Offer</span>
+                        <h3 class="promo-card__title">Free Shipping</h3>
+                        <p class="promo-card__text">On orders over ₹999</p>
+                        <a href="products.html" class="btn btn--white btn--sm">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       FEATURES / VALUE PROPS — Trust-building section
+       ═══════════════════════════════════════════════════ -->
+    <section class="section features" id="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-card__icon">
+                        <i data-feather="truck"></i>
+                    </div>
+                    <h3 class="feature-card__title">Free Shipping</h3>
+                    <p class="feature-card__text">Free delivery on all orders above ₹999. No hidden charges.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="animation-delay:.1s">
+                    <div class="feature-card__icon">
+                        <i data-feather="shield"></i>
+                    </div>
+                    <h3 class="feature-card__title">Secure Payments</h3>
+                    <p class="feature-card__text">100% protected transactions. Your data is safe with us.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="animation-delay:.2s">
+                    <div class="feature-card__icon">
+                        <i data-feather="refresh-cw"></i>
+                    </div>
+                    <h3 class="feature-card__title">Easy Returns</h3>
+                    <p class="feature-card__text">30-day hassle-free return & exchange policy.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="animation-delay:.3s">
+                    <div class="feature-card__icon">
+                        <i data-feather="headphones"></i>
+                    </div>
+                    <h3 class="feature-card__title">24/7 Support</h3>
+                    <p class="feature-card__text">Round-the-clock customer service to help you anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       NEWSLETTER — Email sign-up section
+       ═══════════════════════════════════════════════════ -->
+    <section class="section newsletter" id="newsletter">
+        <div class="container">
+            <div class="newsletter__inner animate-on-scroll">
+                <div class="newsletter__text">
+                    <h2 class="newsletter__title">Stay in the Loop</h2>
+                    <p class="newsletter__subtitle">Subscribe to get exclusive deals, new arrivals, and style tips
+                        straight to your inbox.</p>
+                </div>
+                <form class="newsletter__form" id="newsletterForm">
+                    <div class="newsletter__input-group">
+                        <input type="email" placeholder="Enter your email address" class="newsletter__input"
+                            id="newsletterEmail" required />
+                        <button type="submit" class="btn btn--primary">
+                            Subscribe
+                            <i data-feather="send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       FOOTER — Links, social icons, copyright
+       ═══════════════════════════════════════════════════ -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <!-- Brand Column -->
+                <div class="footer__column footer__brand">
+                    <a href="index.html" class="navbar__logo">
+                        <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+                        Shop<span class="logo__accent">Verse</span>
+                    </a>
+                    <p class="footer__desc">Your premium destination for quality products at the best prices. Shop with
+                        confidence.</p>
+                    <div class="footer__social">
+                        <a href="#" class="social-link" aria-label="Facebook"><i data-feather="facebook"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i data-feather="twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i data-feather="instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="YouTube"><i data-feather="youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer__column">
+                    <h4 class="footer__heading">Quick Links</h4>
+                    <ul class="footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">All Products</a></li>
+                        <li><a href="products.html?category=electronics">Electronics</a></li>
+                        <li><a href="products.html?category=fashion">Fashion</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="footer__column">
+                    <h4 class="footer__heading">Customer Service</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns &amp; Exchanges</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer__column">
+                    <h4 class="footer__heading">Contact</h4>
+                    <ul class="footer__links footer__contact">
+                        <li>
+                            <i data-feather="map-pin"></i>
+                            <span>123 Shopping Ave, Mumbai, India</span>
+                        </li>
+                        <li>
+                            <i data-feather="mail"></i>
+                            <span>support@shopverse.com</span>
+                        </li>
+                        <li>
+                            <i data-feather="phone"></i>
+                            <span>+91 98765 43210</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; 2026 ShopVerse. All rights reserved. Built with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       TOAST NOTIFICATION CONTAINER
+       ═══════════════════════════════════════════════════ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       SCROLL-TO-TOP BUTTON
+       ═══════════════════════════════════════════════════ -->
+    <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+        <i data-feather="chevron-up"></i>
+    </button>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>

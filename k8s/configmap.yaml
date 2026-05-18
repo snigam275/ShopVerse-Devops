@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shopverse-config
+  namespace: shopverse
+data:
+  POSTGRES_DB: "shopverse"
+  POSTGRES_USER: "shopverse"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://db-service:5432/shopverse"
+  SPRING_DATASOURCE_USERNAME: "shopverse"
+  PRODUCT_SERVICE_URL: "http://product-service:8080"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: shopverse-secrets
+  namespace: shopverse
+type: Opaque
+stringData:
+  POSTGRES_PASSWORD: "shopverse_dev"
+  SPRING_DATASOURCE_PASSWORD: "shopverse_dev"

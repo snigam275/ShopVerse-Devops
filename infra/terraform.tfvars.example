@@ -1,0 +1,13 @@
+aws_region   = "ap-south-1"
+vpc_id       = "vpc-XXXXXXXXX"
+subnet_ids   = ["subnet-AAAA", "subnet-BBBB"]
+db_password  = "ShopVerse2026!"
+
+# EC2 Settings
+ec2_instance_type      = "t3.medium"
+existing_key_pair_name = "your-existing-keypair-name"
+# OR provide a public key directly:
+# ssh_public_key = "ssh-rsa AAAA...your-key..."
+
+# Git repo URL (update with your fork)
+repo_url = "https://github.com/utkarshraj1/ShopVerse.git"

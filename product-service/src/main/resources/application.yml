@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: product-service
+
+  # ── Database ──
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/shopverse}
+    username: ${SPRING_DATASOURCE_USERNAME:shopverse}
+    password: ${SPRING_DATASOURCE_PASSWORD:shopverse_dev}
+    hikari:
+      connection-timeout: 30000    # Failure Audit F2: wait for DB readiness
+      maximum-pool-size: 10
+
+  # ── JPA / Hibernate ──
+  jpa:
+    hibernate:
+      ddl-auto: update             # Auto-create/update schema on startup
+    defer-datasource-initialization: true
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # ── Seed Data ──
+  sql:
+    init:
+      mode: always                 # Run data.sql on every startup
+      continue-on-error: true      # ON CONFLICT DO NOTHING won't throw
+
+# ── Actuator (Health Check) ──
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# ── Logging ──
+logging:
+  level:
+    com.shopverse: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN

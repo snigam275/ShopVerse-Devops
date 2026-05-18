@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop All Products — ShopVerse</title>
+  <meta name="description" content="Browse our full collection of premium products. Filter by category, price, and rating to find exactly what you need." />
+
+  <!-- Google Fonts — Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVBAR — Same sticky navbar as index.html
+       ═══════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+        Shop<span class="logo__accent">Verse</span>
+      </a>
+
+      <ul class="navbar__links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link active">Shop</a></li>
+        <li><a href="products.html?category=electronics" class="nav-link">Electronics</a></li>
+        <li><a href="products.html?category=fashion" class="nav-link">Fashion</a></li>
+      </ul>
+
+      <div class="navbar__actions">
+        <button class="btn-icon" id="darkModeToggle" aria-label="Toggle dark mode">
+          <i data-feather="moon" class="icon-dark"></i>
+          <i data-feather="sun" class="icon-light"></i>
+        </button>
+        <a href="cart.html" class="btn-icon cart-icon" id="cartIcon" aria-label="Shopping cart">
+          <i data-feather="shopping-cart"></i>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <i data-feather="menu" class="icon-menu"></i>
+          <i data-feather="x" class="icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGE HEADER — Breadcrumb & title
+       ═══════════════════════════════════════════════════ -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <i data-feather="chevron-right"></i>
+        <span>Shop</span>
+      </div>
+      <h1 class="page-header__title">All Products</h1>
+      <p class="page-header__subtitle">Showing <span id="productCount">0</span> products</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       SHOP LAYOUT — Sidebar filters + product grid
+       ═══════════════════════════════════════════════════ -->
+  <section class="section shop-layout">
+    <div class="container shop-layout__inner">
+
+      <!-- ─── SIDEBAR FILTERS ─── -->
+      <aside class="filters-sidebar" id="filtersSidebar">
+        <div class="filters-sidebar__header">
+          <h3>
+            <i data-feather="sliders"></i>
+            Filters
+          </h3>
+          <button class="btn-text" id="clearFiltersBtn">Clear All</button>
+        </div>
+
+        <!-- Search -->
+        <div class="filter-group">
+          <label class="filter-group__label" for="searchInput">Search</label>
+          <div class="search-input-wrapper">
+            <i data-feather="search"></i>
+            <input
+              type="text"
+              id="searchInput"
+              class="filter-input"
+              placeholder="Search products..."
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <h4 class="filter-group__label">Category</h4>
+          <div class="filter-checkboxes" id="categoryFilters">
+            <label class="filter-checkbox">
+              <input type="checkbox" name="category" value="electronics" />
+              <span class="checkmark"></span>
+              Electronics
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="category" value="fashion" />
+              <span class="checkmark"></span>
+              Fashion
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="category" value="accessories" />
+              <span class="checkmark"></span>
+              Accessories
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="category" value="home" />
+              <span class="checkmark"></span>
+              Home &amp; Living
+            </label>
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="filter-group">
+          <h4 class="filter-group__label">Price Range</h4>
+          <div class="price-range">
+            <input
+              type="range"
+              id="priceRange"
+              class="range-slider"
+              min="0"
+              max="50000"
+              value="50000"
+              step="500"
+            />
+            <div class="price-range__values">
+              <span>₹0</span>
+              <span id="priceRangeValue">₹50,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rating Filter -->
+        <div class="filter-group">
+          <h4 class="filter-group__label">Minimum Rating</h4>
+          <div class="rating-filter" id="ratingFilter">
+            <label class="filter-radio">
+              <input type="radio" name="rating" value="0" checked />
+              <span class="radio-mark"></span>
+              All Ratings
+            </label>
+            <label class="filter-radio">
+              <input type="radio" name="rating" value="4" />
+              <span class="radio-mark"></span>
+              <span class="stars">★★★★</span> &amp; Up
+            </label>
+            <label class="filter-radio">
+              <input type="radio" name="rating" value="3" />
+              <span class="radio-mark"></span>
+              <span class="stars">★★★</span> &amp; Up
+            </label>
+          </div>
+        </div>
+
+        <!-- Mobile: Close filter button -->
+        <button class="btn btn--primary btn--block mobile-filter-close" id="closeFiltersBtn">
+          Apply Filters
+        </button>
+      </aside>
+
+
+      <!-- ─── MAIN PRODUCT AREA ─── -->
+      <main class="shop-main">
+        <!-- Toolbar: Sort + Grid toggle + Mobile filter button -->
+        <div class="shop-toolbar">
+          <button class="btn btn--outline btn--sm mobile-filter-toggle" id="openFiltersBtn">
+            <i data-feather="sliders"></i>
+            Filters
+          </button>
+
+          <div class="shop-toolbar__right">
+            <div class="sort-dropdown">
+              <label for="sortSelect">Sort by:</label>
+              <select id="sortSelect" class="filter-select">
+                <option value="default">Default</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="name-az">Name: A – Z</option>
+                <option value="name-za">Name: Z – A</option>
+              </select>
+            </div>
+
+            <div class="grid-toggle">
+              <button class="btn-icon grid-toggle__btn active" data-grid="grid" aria-label="Grid view">
+                <i data-feather="grid"></i>
+              </button>
+              <button class="btn-icon grid-toggle__btn" data-grid="list" aria-label="List view">
+                <i data-feather="list"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active filter tags -->
+        <div class="active-filters" id="activeFilters"></div>
+
+        <!-- Product Grid — dynamically rendered by script.js -->
+        <div class="products-grid" id="productsGrid">
+          <!-- Skeleton loaders -->
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+          <div class="product-card skeleton"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        </div>
+
+        <!-- No results state -->
+        <div class="no-results" id="noResults" style="display:none;">
+          <div class="no-results__icon">
+            <i data-feather="search"></i>
+          </div>
+          <h3>No products found</h3>
+          <p>Try adjusting your search or filter criteria.</p>
+          <button class="btn btn--primary" id="resetFiltersBtn">Reset Filters</button>
+        </div>
+      </main>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__column footer__brand">
+          <a href="index.html" class="navbar__logo">
+            <span class="logo__icon"><i data-feather="shopping-bag"></i></span>
+            Shop<span class="logo__accent">Verse</span>
+          </a>
+          <p class="footer__desc">Your premium destination for quality products at the best prices. Shop with confidence.</p>
+          <div class="footer__social">
+            <a href="#" class="social-link" aria-label="Facebook"><i data-feather="facebook"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i data-feather="twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i data-feather="instagram"></i></a>
+            <a href="#" class="social-link" aria-label="YouTube"><i data-feather="youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Quick Links</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">All Products</a></li>
+            <li><a href="products.html?category=electronics">Electronics</a></li>
+            <li><a href="products.html?category=fashion">Fashion</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Customer Service</h4>
+          <ul class="footer__links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Contact</h4>
+          <ul class="footer__links footer__contact">
+            <li><i data-feather="map-pin"></i><span>123 Shopping Ave, Mumbai, India</span></li>
+            <li><i data-feather="mail"></i><span>support@shopverse.com</span></li>
+            <li><i data-feather="phone"></i><span>+91 98765 43210</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 ShopVerse. All rights reserved. Built with ❤️</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <i data-feather="chevron-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

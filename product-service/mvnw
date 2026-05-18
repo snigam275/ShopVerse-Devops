@@ -1,0 +1,43 @@
+#!/bin/sh
+# Maven Wrapper script for Unix systems
+# This allows running Maven builds without a local Maven installation
+# Usage: ./mvnw package
+
+set -e
+
+MAVEN_WRAPPER_JAR=".mvn/wrapper/maven-wrapper.jar"
+MAVEN_WRAPPER_PROPERTIES=".mvn/wrapper/maven-wrapper.properties"
+
+# Determine the Maven distribution URL
+if [ -f "$MAVEN_WRAPPER_PROPERTIES" ]; then
+    distributionUrl=$(grep 'distributionUrl' "$MAVEN_WRAPPER_PROPERTIES" | cut -d'=' -f2 | tr -d '\r')
+fi
+
+if [ -z "$distributionUrl" ]; then
+    distributionUrl="https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.9/apache-maven-3.9.9-bin.zip"
+fi
+
+# If Maven is already installed, just use it
+if command -v mvn > /dev/null 2>&1; then
+    exec mvn "$@"
+fi
+
+# Otherwise download and use
+MAVEN_HOME="${HOME}/.m2/wrapper/dists/apache-maven-3.9.9"
+if [ ! -d "$MAVEN_HOME" ]; then
+    echo "Downloading Maven 3.9.9..."
+    mkdir -p "$MAVEN_HOME"
+    if command -v wget > /dev/null 2>&1; then
+        wget -q "$distributionUrl" -O /tmp/maven.zip
+    elif command -v curl > /dev/null 2>&1; then
+        curl -sL "$distributionUrl" -o /tmp/maven.zip
+    else
+        echo "Error: wget or curl is required to download Maven" >&2
+        exit 1
+    fi
+    unzip -q /tmp/maven.zip -d "$MAVEN_HOME"
+    rm /tmp/maven.zip
+fi
+
+MAVEN_BIN=$(find "$MAVEN_HOME" -name 'mvn' -type f | head -1)
+exec "$MAVEN_BIN" "$@"
