@@ -46,7 +46,7 @@ pipeline {
             steps {
                 bat 'docker compose down'
                 bat 'docker compose up -d'
-                bat 'timeout /t 40'
+                sleep(time: 40, unit: 'SECONDS')
             }
         }
     }
