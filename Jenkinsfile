@@ -44,9 +44,10 @@ pipeline {
 
         stage('🚀 Deploy') {
             steps {
-                bat 'docker compose down'
-                bat 'docker compose up -d'
-                sleep(time: 40, unit: 'SECONDS')
+            bat 'docker compose -f compose.yaml down'
+            bat 'docker stop shopverse-devops-frontend-1 || exit 0'
+            bat 'docker compose -f compose.yaml up -d'
+            sleep(time: 40, unit: 'SECONDS')
             }
         }
     }
